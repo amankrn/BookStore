@@ -1,0 +1,51 @@
+{% extends "./base.html" %}
+
+{% block cart %}
+		<li class"mt-2 md-2"><div class="d-flex justify-content-start ">
+
+			<a href="{% url 'cart' %}" class="widget-header">
+				<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
+                <span class="badge badge-pill badge-danger notify">{{cart_value}}</span>
+			</a>
+		</div></li>
+{% endblock %} 
+
+{% block content %}
+
+<section class="section-content padding-y bg">
+    <div class="container">
+    
+   
+    <div class="card">
+        <div class="row no-gutters">
+            <aside class="col-md-6">
+    <article class="gallery-wrap"> 
+        <div class="img-big-wrap">
+           <a href="#"><img src="{{data.0.cover_image}}"></a>
+        </div> 
+        
+    </article> 
+            </aside>
+            <main class="col-md-6 border-left">
+    <article class="content-body">
+    
+    <h2 class="title">{{data.0.title}}</h2>
+    
+    <div class="mb-3"> 
+        <var class="price h4">$ {{data.0.price}}</var> 
+    </div> 
+    <h5> written by :{{author.name}}</h5>
+    <h5>Published on : {{data.0.published_date}}</h5>
+    <p>{{data.0.description}}</p>
+        <hr>
+        {% if data.0.in_cart %}
+                    <a href="{% url 'cart' %}" class="btn  btn-success"> <span class="text">Go to Cart</span> <i class="fa fa-shopping-cart"></i>  </a>
+                    {% else %}
+                    <a href="/cart/{{data.0.id}}/" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fa fa-shopping-cart"></i>  </a>
+        {% endif %}
+
+
+    
+    
+
+{% endblock %}

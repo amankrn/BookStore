@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-check {
+            font-size: 72px;
+            margin-bottom: 20px;
+            color: #28A745;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .invoice-details, .invoice-items, .invoice-footer {
+            margin-top: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        tfoot {
+            font-weight: bold;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="icon-check"><i class="fa fa-check-circle"></i></div>
+    <h2>Order Requested Successfully</h2>
+
+    <div class="invoice-details">
+        <div class="well">
+            <ul>
+                <li><strong>Order ID :</strong> {{ delivery_data.order_id }}</li>
+                <li><strong>Name :</strong> {{ delivery_data.name }}</li>
+                <li><strong>Email :</strong> {{ delivery_data.email }}</li>
+                <li><strong>Mode of Delivery :</strong> Cash On Delivery</li>
+                <li><strong>Address :</strong> {{ delivery_data.address }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="invoice-items">
+        <table>
+            <thead>
+                <tr>
+                    <th class="per70">Books</th>
+                    <th class="per5">Qty</th>
+                    <th class="per25">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td><strong>{{ i.book_title }}</strong><br>By {{ i.book_author }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td>${{ i.book_price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2" class="text-right">Sub Total:</th>
+                    <th class="text-center">${{ total_price }}</th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-right">Shipping:</th>
+                    <th class="text-center">$20.0</th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-right">Grand Total:</th>
+                    <th class="text-center">${{ total_price|add:20 }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="invoice-footer">
+        <p class="text-center">Thank you for shopping with us!</p>
+    </div>
+</div>
+
+</body>
+</html>

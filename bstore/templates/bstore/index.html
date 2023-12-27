@@ -1,0 +1,146 @@
+{% extends "./base.html" %}
+
+{% block cart %}
+		<li class"mt-2 md-2"><div class="d-flex justify-content-start ">
+
+			<a href="{% url 'cart' %}" class="widget-header">
+				<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
+                <span class="badge badge-pill badge-danger notify">{{cart_value}}</span>
+			</a>
+		</div></li>
+{% endblock %} 
+
+{% block content %}
+
+<section class="section-content padding-y">
+    <div class="container">
+    
+    <div class="row">
+        <aside class="col-md-3">
+    
+    <div class="card">
+        <article class="filter-group">
+            <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                    <i class="icon-control fa fa-chevron-down"></i>
+                    <h6 class="title">Categories</h6>
+                </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_1" style="">
+                <div class="card-body">
+    
+                    <ul class="list-menu">
+                        {% for i in data.categories %}
+                        <li><a class="dropdown-item" style="overflow:auto" href="/category/{{i.slug}}/">{{i.name}}  </a></li>
+                        {% endfor %}
+                    </ul>
+    
+                </div> 
+            </div>
+        </article> 
+    
+        <article class="filter-group">
+            <header class="card-header">
+                <a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
+                    <i class="icon-control fa fa-chevron-down"></i>
+                    <h6 class="title">Authors</h6>
+                </a>
+            </header>
+            <div class="filter-content collapse show" id="collapse_2" style="">
+                <div class="card-body">
+    
+                    <ul class="list-menu">
+                        {% for i in data.authors %}
+                        <li><a class="dropdown-item" href="/author/{{i.slug}}/">{{i.name}}  </a></li>
+                        {% endfor %}
+                    </ul>
+    
+                </div>
+        </article> 
+    
+    
+    
+
+    
+    </div>
+    
+        </aside> 
+        <main class="col-md-9">
+    
+
+    
+    <div class="row">
+    
+        {% for i in data.books %}
+        <div class="col-md-4">
+            <figure class="card card-product-grid">
+              <a href="/books/{{i.slug}}/" >
+                <div class="img-wrap">
+                 
+                    <img src="{{i.cover_image}}" alt="cover_image"> 
+                </div> 
+                <figcaption class="info-wrap">
+                    <div class="fix-height">
+                        <h5>{{i.title}}</h5>
+                        <div class="price-wrap mt-2">
+                            <span class="price">${{i.price}}</span>
+                        </div> 
+                    </div>
+                    {% if i.in_cart %}
+                    <a href="{% url 'cart' %}" class="btn btn-block btn-success">Go to Cart </a>
+                    {% else %}
+                    <a href="/cart/{{i.id}}/" class="btn btn-block btn-primary">Add to Cart </a>
+                    {% endif %}
+                </figcaption>
+              </a>
+            </figure>
+        </div> 
+        {% endfor %}
+    
+    </div>  
+    
+    {% comment %} page {% endcomment %}
+    <div class="mt-4" aria-label="Page navigation sample">
+        <ul class="pagination">
+          {% if data.books.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ data.books.previous_page_number }}">Previous</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Previous</span>
+            </li>
+          {% endif %}
+      
+          {% for num in data.books.paginator.page_range %}
+            {% if data.books.number == num %}
+              <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+              </li>
+            {% else %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+      
+          {% if data.books.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ data.books.next_page_number }}">Next</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">Next</span>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    
+        </main> 
+    
+    </div>
+    
+    </div> 
+    </section>
+
+{% endblock %}

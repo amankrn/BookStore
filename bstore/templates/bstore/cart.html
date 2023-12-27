@@ -1,0 +1,164 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block cart %}
+		<li class"mt-2 md-2"><div class="d-flex justify-content-start ">
+
+			<a href="{% url 'cart' %}" class="widget-header">
+				<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
+                <span class="badge badge-pill badge-danger notify">{{cart_value}}</span>
+			</a>
+		</div></li>
+{% endblock %} 
+
+{% block content %}
+
+<div class="container mt-5 p-3 rounded cart">
+    <div class="row no-gutters">
+        <div class="col-md-8">
+            <div class="product-details mr-2">
+                <div class="d-flex flex-row align-items-center"><a href="{% url 'home' %}"><i class="fa fa-long-arrow-left"></i><span class="ml-2">Continue Shopping</span></div></a>
+                <hr>
+                <h6 class="mb-0">Shopping cart</h6>
+                {% for i in data %}
+
+ 
+                <table class="mt-3 p-2 items rounded" style="width: 100%;">
+                    <tr>
+                        <td class="d-flex flex-row align-items-center">
+                            <img class="rounded" src="{{i.book_cover}}/" width="40">
+                            <div class="ml-2">
+                                <span class="font-weight-bold d-block">{{ i.book_title }}</span>
+                                <span class="spec">By {{i.book_author}}</span>
+                            </div>
+                        </td>
+                        <td class="d-flex flex-row align-items-center justify-content-between">
+                            <span class="d-block">Quantity : {{i.quantity}}</span>
+                            <span class="d-block ml-5 font-weight-bold">${{i.book_price}}</span>
+                            <a href="/cart/delete/{{i.id}}/" class="btn btn-danger mr-5">Delete</a>
+                            
+                        </td>
+                    </tr>
+                </table>
+                
+                
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="payment-info">
+                <form action="/../order/" method="post">
+                    {% csrf_token %} 
+                <div class="d-flex justify-content-between align-items-center"><span class="type d-block mt-3 mb-1">Order details</span>
+                </div><span class="type d-block mt-3 mb-1">Mode of Delivery : </span>
+                
+                    <label class="radio"> 
+                    <input type="radio" name="card" value="payment" checked> <span> Cash On Delivery <img width="70" src="{% static 'images/cash-on-delivery-.png' %}"/></span> </label>
+
+
+                <div><label class="credit-card-label">Name :</label>
+                    <input type="text" class="form-control credit-inputs" name="name" id="name" value="{{user.first_name}} {{user.last_name}}" >
+                    <small  id="ename"></small>
+                </div>
+                <div><label class="credit-card-label">Email :</label>
+                    <input type="text" class="form-control credit-inputs" name="email" id="email" value="{{user.email}}">
+                    <small  id="eemail"></small>
+                </div>
+                <div><label class="credit-card-label">Address :</label>
+                    <input type="text" class="form-control credit-inputs" name="address" d="address" placeholder="Please Enter Your Address" required>
+                    <small  id="eaddress"></small>
+                </div>
+                
+
+                <hr class="line">
+                <div class="d-flex justify-content-between information"><span>Subtotal</span><span>${{total_price}}</span></div>
+                <div class="d-flex justify-content-between information"><span>Shipping</span><span>$20.0</span></div>
+                <div class="d-flex justify-content-between information"><span>Total(Incl. taxes)</span><span>${{total_price|add:20}}</span></div>
+
+           
+                    <button class="btn btn-primary btn-block d-flex justify-content-between mt-3" onclick="validateForm()" type="submit" {% if cart_value == 0 %}disabled{% endif %}>
+                      <span>${{total_price|add:20}}</span>
+                      <span>Request Order<i class="fa fa-long-arrow-right ml-1"></i></span>
+                    </button>
+         
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    const eleName = document.getElementById("name");
+    const eleEmail = document.getElementById("email");
+    
+    
+    
+    function seterror(iid, eid, info) {
+        document.getElementById(eid).textContent = info;
+        document.getElementById(eid).style = "color:red;";
+        document.getElementById(iid).style = "border: 1px solid red";
+    }
+    
+    function setvalid(iid, eid, info) {
+        document.getElementById(eid).textContent = info;
+        document.getElementById(iid).style = "border: 1px solid green";
+    }
+    
+    
+    //--------------------name-------
+    function nameValid() {
+        eleName.value = eleName.value.trim();
+        eleName.value = eleName.value.slice(0, 30);
+        if (!/^[a-zA-Z'-\s]{1,30}$/.test(eleName.value)) {
+            seterror('name','ename', "*Please enter valid name");
+        } else {
+            setvalid('name','ename','');
+        }
+    }
+    eleName.addEventListener("input", function () {
+        nameValid();
+    });
+
+    
+    
+    //-------------------email----------
+    function emailValid() {
+        eleEmail.value = eleEmail.value.toLowerCase();
+        eleEmail.value = eleEmail.value.slice(0, 30);
+        if (!/^[a-z0-9.-]+@[a-z0-9]+\.[a-z]{2,4}$/.test(eleEmail.value)) {
+            seterror('email','eemail', "*Please enter valid email");
+        } else {
+            setvalid('email','eemail','');
+        }
+    }
+    
+    eleEmail.addEventListener("input", function () {
+        emailValid();
+    });
+    
+ 
+    
+    //-----------------------------------sub
+    function validateForm() {
+        var doValid = true;
+        nameValid();
+        if (document.getElementById("ename").textContent != "") {
+            var doValid = false;
+        }
+    
+    
+        emailValid();
+        if (document.getElementById("eemail").textContent != "") {
+            var doValid = false;
+        }
+    
+        if (doValid == false) {
+            event.preventDefault();
+        } 
+    
+        return doValid;
+    }</script>
+
+{% endblock %}
