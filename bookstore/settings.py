@@ -122,8 +122,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'aman.kumar@indicchain.com'
-EMAIL_HOST_PASSWORD = 'nfzq paln ksru ihgr'
+EMAIL_HOST_USER = '****@gmail.com'
+EMAIL_HOST_PASSWORD = '**** **** **** ****'
 
 SESSION_COOKIE_AGE = 900
 SESSION_SAVE_EVERY_REQUEST = True
