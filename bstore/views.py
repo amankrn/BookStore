@@ -8,6 +8,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.authtoken.models import Token
 import random
 from django.core.mail import send_mail
+import os
+from dotenv import load_dotenv
 
 #home
 @login_required(login_url='login')
@@ -189,12 +191,13 @@ def order(request):
         total_price += float(cart_items[i]['book_price'])
 
     #send mail
+    load_dotenv()
     subject = 'Order Details'
     context = {'data': cart_items, 'total_price': total_price, 'delivery_data': delivery_data}
     email_content = render(request, 'bstore/mail_order.html', context).content.decode('utf-8')
     message = 'Thank you for your order!'
     recipient_list = [context['delivery_data']['email']]
-    from_email = 'aman.kumar@indicchain.com'
+    from_email = os.getenv("host_email")
     send_mail(subject, message, from_email, recipient_list, html_message=email_content)
 
     cart_value=car_value(user.id,headers)
